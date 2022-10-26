@@ -1,0 +1,17 @@
+ INSERT INTO console (id_console, nome, data_lancamento) VALUES (NULL, 'nintendo', '2000-
+04-08'), 
+(NULL, 'ps2', '2021-03-14'), 
+(NULL, 'ps3', '2021-03-09'), 
+(NULL, 'ps4', '1997-04-21');
+
+INSERT INTO tipo (id_tipo, caracteristica) VALUES (NULL, 'digital'), 
+(NULL, 'blue-ray'), 
+(NULL, 'memorycard'), 
+(NULL, 'pen drive');
+
+
+INSERT INTO jogos (id_jogo, nome, data_lancamento, preco, id_console, id_tipo) VALUES 
+(NULL, 'GuitarHero', '2015-12-01', '40', '7', '9'), 
+(NULL, 'gta', '2007-08-24', '97', '6', '4'), 
+(NULL, 'ResidentEvil', '2001-07-30', '54','1','7'), 
+(NULL, 'Pes21', '2021-03-7', '98', '4', '5');

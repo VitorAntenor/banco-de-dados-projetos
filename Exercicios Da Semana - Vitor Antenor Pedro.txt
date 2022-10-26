@@ -1,0 +1,78 @@
+CREATE TABLE jogo(
+nome_jogo varchar(100), data_lancamento DATE, CONSTRAINT jogoPK PRIMARY KEY (nome_jogo)
+    );
+    
+CREATE TABLE console(
+nome_console VARCHAR(100), data_lancamento DATE, CONSTRAINT consolePK PRIMARY KEY(nome_console)
+    );
+  
+CREATE TABLE tipo(
+nome_tipo VARCHAR(100), CONSTRAINT tipoPK PRIMARY KEY(nome_tipo)
+);
+
+CREATE TABLE preco(
+nome_jogo VARCHAR(100), nome_console varchar(100), nome_tipo VARCHAR(50), valor char(100) NOT NULL, CONSTRAINT precoPK PRIMARY KEY (nome_jogo, nome_Console, nome_tipo)
+ );
+    
+CREATE TABLE compatibilidade(
+nome_jogo VARCHAR(100), nome_console VARCHAR(100),CONSTRAINT compatibilidadePK PRIMARY KEY (nome_jogo, nome_console)
+);
+
+CREATE TABLE disponibilidade (
+nome_jogo VARCHAR(100), nome_tipo VARCHAR(100), CONSTRAINT disponivelPK PRIMARY KEY (nome_jogo, nome_tipo)
+);
+
+ALTER TABLE tipo ADD;
+
+ALTER TABLE preco ADD CONSTRAINT jogo_PrecoPK FOREIGN KEY (nome_jogo) REFERENCES jogo (nome_jogo);
+ALTER TABLE preco ADD CONSTRAINT tipo_precoFK FOREIGN KEY (nome_tipo) REFERENCES tipo nome_tipo);
+ALTER TABLE preco ADD CONSTRAINT console_PrecoFK FOREIGN KEY (nome_console) REFERENCES console (nome_console);
+
+
+ALTER TABLE compatiblidade ADD CONSTRAINT jogo_compatibilidadeFK FOREIGN KEY (nome_jogo) REFERENCES jogo (nome_jogo);
+ALTER TABLE compatibilidade ADD CONSTRAINT console_compatibilidadeFK (nome_console) REFERENCES console (nome_console);
+
+ALTER TABLE disponibilidade ADD CONSTRAINT jogo_DisponibilidadeFK FOREIGN KEY (nome_jogo) REFERENCES jogo (nome_jogo);
+ALTER TABLE disponibilidade ADD CONSTRAINT tipo_disponibilidadeFK FOREIGN KEY (nome_tipo) REFERENCES tipo (nome_tipo);
+
+INSERT INTO jogo VALUES(`PES 2021`, `02-05-2021`);
+INSERT INTO jogo VALUES(`FIFA 12`, `12-03-13`);
+
+INSERT INTO disponibilidade VALUES (`guitar hero`, `blu-ray`);
+INSERT INTO disponibilidade VALUES (`GTA`, `digital`);
+INSERT INTO disponibilidade VALUES (`PES 10`, `blu-ray`);
+INSERT INTO disponibilidade VALUES (`Pes 14`, `digital`);
+
+/* RESPONDENDO LETRA A */
+
+SELECT * FROM compatibilidade ORDER BY nome_jogo;
+SELECT * FROM preco ORDER BY valor DESC;
+SELECT COUNT (nome_jogo) AS Quantidade, nome_console FROM compatibilidade GROUP BY nome_console;
+
+/* REspondendo LETRA D */
+
+SELECT RND (AVG(valor),2) AS Media, nome_console FROM preco GROUP BY nome_console;
+
+/* Respondendo LETRA E */
+
+SELECT substituir (nome_jogo,3,1) AS Inicial, data_lancamento FROM jogo WHERE data_lancamento < '21-APR-2020';
+
+SELECT * FROM preco WHERE valor IN (SELECT MAX (valor) FROM preco GROUP BY nome_console);
+
+SELECT * FROM preco JOIN (SELECT AVG(valor) AS media, nome_console FROM preco GROUP BY nome_console) USING (nome_console) WHERE valor > media;
+
+/* LETRA A */
+
+SELECT * FROM compatibilidade;
+
+/* LETRA B */ 
+
+SELECT nome_jogo, valor FROM preco ORDER BY valorr DESC;
+
+/* LETRA C */
+
+SELECT COUNT (nome_jogo) AS quantidade, nome_console FROM  compatibilidade ORDER BY nome_console;
+
+SELECT round (AVG(valor),2) AS media, nome_console FROM preco GROUP BY nome_console;
+
+SELECT substituicao (nome_jogo, 1,1) AS inicial, data_lancamento FROM jogo WHERE data_lancamento < '21-apr-2021';

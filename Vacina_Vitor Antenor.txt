@@ -1,0 +1,148 @@
+CREATE TABLE cidade(
+    CONSTRAINT cidade_pk PRIMARY KEY (id_cidade)
+    id_cidade int(40) NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(140),
+    populacao DECIMAL(50),
+);
+
+CREATE TABLE fabricante(
+    CONSTRAINT fabrica_pk PRIMARY KEY (id_fabricante)
+    id_fabricante int(40) NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(100),
+);
+
+CREATE TABLE dose(
+
+    CONSTRAINT lote_pk PRIMARY KEY (lote),
+    lote int(100) NOT NULL AUTO_INCREMENT,
+    id_fabricante int(10) NOT NULL,
+    quant int(200),
+    data_compra date,
+    CONSTRAINT fabrica_pk FOREIGN KEY (id_fabricante) REFERENCES fabricante (id_fabricante)
+);
+
+CREATE TABLE primera_Dose(
+    CONSTRAINT pDose_pk PRIMARY KEY (id_Primeira_dose),
+    id_Primeira_dose int(10)NOT NULL AUTO_INCREMENT,
+    data_Dose date, 
+    id_cidade int(40) NOT NULL,
+    id_Dose int(100) NOT NULL,
+    quant int(100),
+    CONSTRAINT cidade_pk FOREIGN KEY (id_cidade) REFERENCES cidade (id_cidade),
+    CONSTRAINT dose_pk FOREIGN KEY (id_dose) REFERENCES dose (id_dose)
+);
+
+CREATE TABLE segunda_Dose(
+    CONSTRAINT sDose_pk PRIMARY KEY (id_Segunda_dose),
+    id_Segunda_dose int(10)NOT NULL AUTO_INCREMENT,
+    data_Dose date, 
+    id_idade int(40) NOT NULL,
+    id_Dose int(10) NOT NULL,
+    quant int(100),
+    CONSTRAINT cidade_pk FOREIGN KEY (id_cidade) REFERENCES ciadade (id_cidade),
+    CONSTRAINT dose_pk FOREIGN KEY (id_dose) REFERENCES dose (id_dose)
+);
+
+INSERT INTO cidade
+(nome, populacao)
+VALUES('Uba', '13000'),
+('Juiz de fora', '60000'),
+('sao paulo', '1000000');
+
+INSERT INTO fabricante 
+(nome)
+VALUES('butantan'),
+('AstraZeneca');
+('CoronaVac'),
+
+INSERT INTO dose
+(id_fabricante,quant, data_compra)
+VALUES('1','200','2021/04/06'),
+('3','8000','2021/03/09'),
+('6','9000','2021/03/13');
+
+INSERT INTO primera_Dose
+(data_Dose, id_cidade, id_Dose, quant)
+VALUES('2021/09/03','1','7','9000'),
+('2021/06/09','1','2','2000'),
+('2021/02/15','2','3','600'),
+('2021/07/13','2','1','500'),
+('2021/08/19','3','2','900'),
+('2021/09/25','1','2','700');
+
+INSERT INTO segunda_Dose
+(data_Dose, id_cidade, id_Dose, quant)
+VALUES('2021/01/20','2','1','5000'),
+('2021/03/20','1','3','800'),
+('2021/03/19','3','2','500'),
+('2021/03/01','3','3','900'),
+('2021/03/11','1','1','1000'),
+('2021/03/25','2','1','755');
+
+Questao 1
+SELECT  SUM(primera_dose.quantidade) AS Total_Primera_Dose, cidade.nome
+FROM primera_dose
+INNER JOIN cidade ON primera_dose.id_cidade = cidade.id_cidade
+GROUP BY cidade.nome
+
+Questao 2
+SELECT DISTINCT(cidade.id_cidade), SUM(primera_dose.quant) + SUM(segunda_dose.quant) AS Total_Dose, cidade.nome
+FROM cidade
+INNER JOIN primera_dose ON primera_dose.id_cidade = cidade.id_cidade
+INNER JOIN segunda_dose ON segunda_dose.id_cidade = cidade.id_cidade
+GROUP BY cidade.id_cidade
+ 
+Questao 3
+SELECT (SUM(DISTINCT(primera_dose.quant)) + SUM(DISTINCT(segunda_dose.quant))) AS dose, 
+(SELECT nome 
+FROM fabricante WHERE primera_dose.idP_dose = fabricante.id_fabricante) AS nome
+FROM primera_dose
+INNER JOIN segunda_dose ON primera_dose.id_Primeira_dose = segunda_dose.id_Segunda_dose
+GROUP BY primera_dose.id_Primeira_dose
+
+Questao 4 
+SELECT nome, SUM(quant) 
+FROM (SELECT cidade.nome, primera_dose.quant 
+FROM primera_dose 
+INNER JOIN cidade ON primera_dose.id_Primeira_dose = cidade.id_cidade)
+GROUP BY nome HAVING SUM(quantidade) = (SELECT MAX (SUM(quant)) 
+FROM((SELECT cidade.nome quant
+FROM primera_dose
+INNER JOIN cidade ON primera_dose.id_Primeira_dose = cidade.id_Primeira_dose))
+GROUP BY nome;)
+    
+Questao 5
+SELECT nome , SUM(quant)
+FROM (SELECT cidade.Nome, primera_dose.quant 
+FROM primera_dose 
+INNER JOIN cidade ON primera_dose.id_Primeira_dose = cidade.id_cidade 
+UNION SELECT cidade.nome, segunda_dose.quant 
+FROM segunda_dose 
+INNER JOIN cidade ON segunda_dose.id_Segunda_dose = cidade.id_cidade)
+GROUP BY Nome
+HAVING SUM(quant) = (SELECT MAX(SUM(quant)) 
+FROM (SELECT cidade.Nome, primera_dose.quant 
+FROM primera_dose 
+INNER JOIN cidade ON primera_dose.id_Primeira_dose = cidade.id_cidade 
+UNION SELECT cidade.Nome, segunda_dose.quant
+FROM segunda_dose 
+INNER JOIN cidade ON segunda_dose.id_Segunda_dose = cidade.id_cidade) 
+GROUP BY nome);
+
+Questao 6
+SELECT nome, SUM(quant)
+FROM (SELECT fabricante.nome, segunda_dose.quant)
+FROM segunda_dose
+INNER JOIN fabricante ON segunda_dose.id_Segunda_dose = fabricante.id_fabricante
+GROUP BY nome;
+
+Questao 7
+with data_cidade as
+(select id_cidade, data from PrimeiraDoseCidade group by id_cidade, data)
+select dc.id_cidade, dc.data data_dc, p.data data_p, p.quantidade from PrimeiraDoseCidade p join data_cidade dc on p.id_cidade=dc.id_cidade where p.data<=dc.data order by dc.id_cidade, dc.data;
+
+
+
+
+
+

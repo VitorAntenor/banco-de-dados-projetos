@@ -1,0 +1,11 @@
+SELECT * FROM jogos;
+
+SELECT * FROM console;
+
+SELECT * FROM tipo;
+
+SELECT nome,data_lancamento FROM jogos WHERE nome = UPPER(nome) ORDER BY nome ASC
+
+SELECT nome,data_lancamento FROM console WHERE nome = UPPER(nome) ORDER BY nome ASC
+
+SELECT caracteristica FROM jogos WHERE caracteristica = UPPER(caracteristica) ORDER BY nome ASC

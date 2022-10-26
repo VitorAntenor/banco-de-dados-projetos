@@ -1,0 +1,67 @@
+CREATE TABLE Cervejas(
+CONSTRAINT codigo_PK PRIMARY KEY (codigo),
+CONSTRAINT codigo_Bar FOREIGN KEY,
+codigo NUMERIC,
+preco NUMERIC,
+Fabricante VARCHAR(100),
+);
+
+CREATE TABLE Bares(
+CONSTRAINT codigo_Bar_PK PRIMARY KEY(codigo_Bar),
+codigo_Bar NUMERIC,
+numero_Cervejas_Estocar_Livre VARCHAR(100),
+capacidade_Estoque VARCHAR(100),
+Endereco VARCHAR(100),
+nome_Bar VARCHAR(100)
+);
+
+CREATE TABLE Entregas(
+CONSTRAINT codigo_Entrega_PK PRIMARY KEY (codigo_Entrega),
+codigo_Entrega NUMERIC,
+Hora_Entrega_Realizada NUMERIC,
+Data_Entrega_Realizada DATE,
+Data_Planejada_Entrega DATE,
+Hora_Planejada_Entrega NUMERIC
+);
+
+ALTER TABLE cervejas ADD CONSTRAINT codigo_Bar_FK FOREIGN KEY (codigo_Bar) REFERENCES bares (codigo_Bar);
+
+ALTER TABLE bares ADD CONSTRAINT
+codigo_FK FOREIGN KEY (codigo)
+REFERENCES cervejas (codigo);
+
+ALTER TABLE bares ADD CONSTRAINT 
+codigo_Entrega_FK FOREIGN KEY (codigo_Entrega)
+REFERENCE Entregas (codigo_Entrega);
+
+ALTER TABLE entregas ADD CONSTRAINT 
+codigo_Bar_FK FOREIGN KEY (codigo_bar)
+REFERENCE Entregas (codigo_Bar);
+
+ALTER TABLE entregas ADD CONSTRAINT
+codigo_FK FOREIGN KEY (codigo)
+REFERENCE cervejas (codigo);
+
+INSERT INTO `cervejas`(`codigo`, `preco`, `Fabricante`) VALUES ('01','25','ambev');
+INSERT INTO `cervejas`(`codigo`, `preco`, `Fabricante`) VALUES ('02','35','brahma')
+INSERT INTO `cervejas`(`codigo`, `preco`, `Fabricante`) VALUES ('03','50','skol')
+
+INSERT INTO `bares`(`codigo_Bar`, `numero_Cervejas_Estocar_Livre`, `capacidade_Estoque`, `Endereco`, `nome_Bar`) VALUES ('04','55','100','rua jardim america','fisguinho')
+INSERT INTO `bares`(`codigo_Bar`, `numero_Cervejas_Estocar_Livre`, `capacidade_Estoque`, `Endereco`, `nome_Bar`) VALUES ('05','98','150','avenida beira rio','bar copo sujo')
+INSERT INTO `bares`(`codigo_Bar`, `numero_Cervejas_Estocar_Livre`, `capacidade_Estoque`, `Endereco`, `nome_Bar`) VALUES ('06','60','120','jardim eugenia','barril')
+
+INSERT INTO `entregas`(`codigo_Entrega`, `Hora_Entrega_Realizada`, `Data_Entrega_Realizada`, `Data_Planejada_Entrega`, `Hora_Planejada_Entrega`) VALUES ('07','13','14/02/10','10/02/20','12')
+INSERT INTO `entregas`(`codigo_Entrega`, `Hora_Entrega_Realizada`, `Data_Entrega_Realizada`, `Data_Planejada_Entrega`, `Hora_Planejada_Entrega`) VALUES ('08','16','09/01/19','10/01/19','14')
+INSERT INTO `entregas`(`codigo_Entrega`, `Hora_Entrega_Realizada`, `Data_Entrega_Realizada`, `Data_Planejada_Entrega`, `Hora_Planejada_Entrega`) VALUES ('09','11','01/04/21','31/03/21','12')
+
+-- Questao 1--
+
+SELECT nome_Bar FROM bares ORDER BY capacidade_Estoque DESC;
+
+-- Questao 1.2--
+
+SELECT nome_Bar FROM bares ORDER BY numero_Cervejas_Estocar_Livre DESC;
+
+-- Questao 2--
+
+SELECT nome_Bar FROM bares ORDER BY capacidade_Estoque;

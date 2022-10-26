@@ -1,0 +1,27 @@
+CREATE TABLE Jogos (
+ CONSTRAINT jogos_pk PRIMARY KEY (id_jogo),
+ nome varchar(20) NOT NULL,
+ data_lancamento Date NOT NULL,
+ preco number NOT NULL CHECK (preco > 1 AND preco <500),
+ id_console number NOT NULL,
+ id_tipo number NOT NULL
+);
+
+CREATE TABLE tipo (
+ CONSTRAINT tipo_pk PRIMARY KEY (id_tipo),
+ caracteristica varchar(50) NOT NULL
+);
+
+CREATE TABLE console (
+ CONSTRAINT console_pk PRIMARY KEY (id_console),
+ nome_console varchar(50) NOT NULL,
+ data_lancamento Date NOT NULL
+);
+
+ALTER TABLE Jogos ADD CONSTRAINT jogos.3_FK
+ FOREIGN KEY (id_console)
+ REFERENCES console (id_console);
+
+ALTER TABLE Jogos ADD CONSTRAINT Jogos.4_FK
+ FOREIGN KEY (id_tipo)
+ REFERENCES tipo (id_tipo);
